@@ -1,0 +1,33 @@
+name: gate
+on: [push, pull_request]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: tests
+        run: node --test kernel.test.mjs
+      - name: mutation gate — kernel.mjs must be CLEAN
+        run: |
+          node tools/witness.mjs mutate kernel.mjs --timeout 30000 --cap 500 --test node --test kernel.test.mjs | tee gate.out || true
+          node -e "const b=require('fs').readFileSync('gate.out','utf8');const j=JSON.parse(b.slice(b.indexOf('{'),b.lastIndexOf('}')+1));if(j.clean!==true){console.error('GATE NOT CLEAN');process.exit(1)}console.log('CLEAN '+j.killed+'/'+j.total)"
+      - name: the shipped catalogue and every listing must verify against the shipped kernel
+        run: |
+          node -e "
+          const fs = require('fs');
+          import('./kernel.mjs').then((k) => {
+            const cat = JSON.parse(fs.readFileSync('catalogue/catalogue.json', 'utf8'));
+            const vc = k.verifyCatalogue(cat);
+            if (!vc.ok || vc.valid !== true) { console.error('CATALOGUE INVALID: ' + vc.why); process.exit(1); }
+            const listings = JSON.parse(fs.readFileSync('catalogue/listings.json', 'utf8'));
+            for (const l of listings) { const v = k.verifyListing(l); if (!v.ok || v.valid !== true) { console.error('LISTING INVALID ' + l.node + ': ' + v.why); process.exit(1); } }
+            if (listings.length !== cat.count) { console.error('listing count mismatch'); process.exit(1); }
+            console.log('catalogue intact: ' + cat.count + ' verified listings');
+          });"
+      - name: page fixpoint — the live logic IS the gated kernel
+        run: |
+          node make-page.mjs
+          git diff --exit-code index.html

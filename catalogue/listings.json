@@ -1,0 +1,52 @@
+[
+  {
+    "v": 1,
+    "kind": "fallforge-listing",
+    "node": "triage-1b",
+    "useCase": "support-triage",
+    "base": "llama3.2:1b",
+    "summary": "Routes a support message to {category, urgency, order} as strict JSON. A 1B model that beats its own base, ~3x faster than the 7B.",
+    "manifestHash": "a6224303c927d40d46bae0c0c42a24ba321b71ff81b36c8c25a7020c99c1c60d",
+    "receipts": [
+      {
+        "vs": "llama3.2:1b",
+        "hash": "eaff080e1157f472aebcd4d8b3220ab596b752905ca28128d172372cdfd9ba86",
+        "verdict": "BEATS",
+        "certified": true
+      },
+      {
+        "vs": "qwen2.5:7b",
+        "hash": "01dae9c907bda058d2c75acf5ff05b4ff70b1a6f9f6e804794ad3ada852f5b37",
+        "verdict": "LOSES",
+        "certified": false
+      }
+    ],
+    "scope": "proof is scoped to each receipt’s probe set; savings use the buyer’s own rates",
+    "hash": "0a6f782e2d38f1f71051ac83dfd1a3271af5e7b61fda5a263c054d9046ad6a99"
+  },
+  {
+    "v": 1,
+    "kind": "fallforge-listing",
+    "node": "review-1b",
+    "useCase": "code-review",
+    "base": "llama3.2:1b",
+    "summary": "Classifies a code snippet to {severity, category} as strict JSON — blocker/warning/nit/ok across bug/security/style/perf.",
+    "manifestHash": "41a7c0a902725a4e142410d401328f0ed7ac319ddf6a8456e438291fff87d57a",
+    "receipts": [
+      {
+        "vs": "llama3.2:1b",
+        "hash": "52517cbf310f94124165ea6bd1d31fdb83901696c6aa43aba6ace6a6344f4a74",
+        "verdict": "BEATS",
+        "certified": true
+      },
+      {
+        "vs": "qwen2.5:7b",
+        "hash": "82fa7701ba5319cb2f76b6c54c5d4d8a5c7af28384545fd463d9235eaae7d728",
+        "verdict": "LOSES",
+        "certified": false
+      }
+    ],
+    "scope": "proof is scoped to each receipt’s probe set; savings use the buyer’s own rates",
+    "hash": "f89924b018af9f4bf317f502b31fa35ea3193c9ef74b291a1fad7a79b8dea747"
+  }
+]

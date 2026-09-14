@@ -1,0 +1,150 @@
+{
+  "total": 1510,
+  "unclassified": 842,
+  "usecases": [
+    {
+      "key": "finance-extract",
+      "label": "Finance & accounting extraction",
+      "count": 347,
+      "live": 56,
+      "examples": [
+        "9-axis-human-sonar-api",
+        "9-axis-human-sonar-mcp",
+        "9-axis-human-sonar-sdk",
+        "accountinghouse"
+      ]
+    },
+    {
+      "key": "code-review",
+      "label": "Code review & quality",
+      "count": 115,
+      "live": 90,
+      "examples": [
+        "ACG_Repo_Template",
+        "acg-assessor",
+        "ACG-Ballroom",
+        "acg-geo-repo"
+      ]
+    },
+    {
+      "key": "legal-review",
+      "label": "Legal & compliance review",
+      "count": 39,
+      "live": 13,
+      "examples": [
+        "declaw-l4-drift-case-study",
+        "divorcerbot",
+        "docmind-api",
+        "fall-euaiact"
+      ]
+    },
+    {
+      "key": "mesh-orchestrate",
+      "label": "Mesh orchestration & routing",
+      "count": 38,
+      "live": 27,
+      "examples": [
+        "9-axis-human-sonar",
+        "airgap",
+        "build-geometry",
+        "cassietorusbtc135solver"
+      ]
+    },
+    {
+      "key": "health-triage",
+      "label": "Health & clinical triage",
+      "count": 36,
+      "live": 26,
+      "examples": [
+        "diagnostic-braid",
+        "doggyap",
+        "earned",
+        "fall-substrate"
+      ]
+    },
+    {
+      "key": "content-draft",
+      "label": "Content drafting & rewrite",
+      "count": 29,
+      "live": 14,
+      "examples": [
+        "contentful-api",
+        "contentful-mcp",
+        "contentful-sdk",
+        "datascope"
+      ]
+    },
+    {
+      "key": "sales-crm",
+      "label": "Sales & CRM enrichment",
+      "count": 17,
+      "live": 14,
+      "examples": [
+        "fallcall",
+        "fallcrm",
+        "fallcrm-elite",
+        "fallforce"
+      ]
+    },
+    {
+      "key": "data-extract",
+      "label": "Structured data extraction",
+      "count": 15,
+      "live": 9,
+      "examples": [
+        "bloom-profile-builder",
+        "contact",
+        "fallbase",
+        "fallcarousel"
+      ]
+    },
+    {
+      "key": "doc-classify",
+      "label": "Document classification & routing",
+      "count": 13,
+      "live": 9,
+      "examples": [
+        "fall-mcp-bridge",
+        "fall-registry",
+        "fallasset",
+        "fallperf"
+      ]
+    },
+    {
+      "key": "security-scan",
+      "label": "Security & red-team scan",
+      "count": 10,
+      "live": 7,
+      "examples": [
+        "clhes-harmonic-energy-system",
+        "fallscrub",
+        "fallsecurity",
+        "fallsecurity-api"
+      ]
+    },
+    {
+      "key": "support-triage",
+      "label": "Support ticket triage",
+      "count": 5,
+      "live": 5,
+      "examples": [
+        "fallconcierge",
+        "fallforge",
+        "fallhub",
+        "fallinsurancepaper"
+      ]
+    },
+    {
+      "key": "education",
+      "label": "Education & assessment",
+      "count": 4,
+      "live": 1,
+      "examples": [
+        "falllearn",
+        "falllearn-repo-api",
+        "falllearn-repo-mcp",
+        "falllearn-repo-sdk"
+      ]
+    }
+  ]
+}

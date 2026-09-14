@@ -1,0 +1,22 @@
+{
+  "v": 1,
+  "kind": "fallforge-catalogue",
+  "count": 2,
+  "nodes": [
+    {
+      "node": "review-1b",
+      "useCase": "code-review",
+      "base": "llama3.2:1b",
+      "summary": "Classifies a code snippet to {severity, category} as strict JSON — blocker/warning/nit/ok across bug/security/style/perf.",
+      "hash": "f89924b018af9f4bf317f502b31fa35ea3193c9ef74b291a1fad7a79b8dea747"
+    },
+    {
+      "node": "triage-1b",
+      "useCase": "support-triage",
+      "base": "llama3.2:1b",
+      "summary": "Routes a support message to {category, urgency, order} as strict JSON. A 1B model that beats its own base, ~3x faster than the 7B.",
+      "hash": "0a6f782e2d38f1f71051ac83dfd1a3271af5e7b61fda5a263c054d9046ad6a99"
+    }
+  ],
+  "hash": "2ef1a29a06f7ec0e5138d7dbe35b841cbfca83d4a40780098121a918dccaef84"
+}

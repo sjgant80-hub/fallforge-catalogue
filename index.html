@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FallForge Catalogue — the shelf of sovereign nodes</title>
+<meta name="description" content="Layer 4 of the sovereign-node factory: pre-minted, owned SLM nodes per use-case, each with a tamper-evident proof-of-play receipt, and an own-vs-rent savings calculator that runs on YOUR rates — and can honestly say renting is cheaper. Verified in your browser.">
+<style>
+  :root{
+    --bg:#0c1210; --panel:#121a17; --line:#203029; --ink:#e7f0eb; --dim:#8fa89c;
+    --accent:#3fbf8f; --accent2:#7fe0b8; --good:#3fbf8f; --bad:#f07862; --warn:#e8b34b;
+    --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,Segoe UI,Roboto,sans-serif;padding:0 0 4rem}
+  .wrap{max-width:940px;margin:0 auto;padding:0 1rem}
+  header{padding:2rem 0 .8rem}
+  h1{font-size:1.6rem;letter-spacing:-.01em}
+  h1 .g{color:var(--accent)}
+  .sub{color:var(--dim);margin-top:.4rem;max-width:48rem}
+  h2{font-size:1.05rem;margin:1.8rem 0 .6rem}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem;margin:.8rem 0}
+  .mono{font:.82rem var(--mono)} .dim{color:var(--dim)}
+  .badge{font:700 .7rem var(--mono);padding:.2rem .55rem;border-radius:20px;border:1px solid var(--line)}
+  .badge.ok{color:#082018;background:var(--good);border-color:var(--good)}
+  .badge.bad{color:#fff;background:var(--bad);border-color:var(--bad)}
+  .badge.warn{color:#231b06;background:var(--warn);border-color:var(--warn)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:.8rem}
+  .node{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+  .node .top{padding:.8rem 1rem;border-bottom:1px solid var(--line)}
+  .node .name{font:800 1.05rem var(--mono);color:var(--accent2)}
+  .node .uc{font:.72rem var(--mono);color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-top:.15rem}
+  .node .sum{padding:.7rem 1rem;color:var(--dim);font-size:.88rem;border-bottom:1px dashed var(--line)}
+  .node .rec{padding:.5rem 1rem;font:.76rem var(--mono);display:flex;justify-content:space-between;gap:.5rem;border-bottom:1px dashed var(--line)}
+  .node .rec .beats{color:var(--good);font-weight:700} .node .rec .loses{color:var(--bad);font-weight:700}
+  .node .foot{padding:.5rem 1rem;font:.7rem var(--mono);color:var(--dim);word-break:break-all}
+  .usecases{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.5rem}
+  .uc-row{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.55rem .8rem;font-size:.85rem;display:flex;justify-content:space-between;gap:.6rem}
+  .uc-row .n{font:700 .9rem var(--mono);color:var(--accent)}
+  .uc-row.has{border-color:var(--accent)}
+  .calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.6rem}
+  .calc label{display:block;font:.7rem var(--mono);color:var(--dim);margin-bottom:.2rem;text-transform:uppercase;letter-spacing:.05em}
+  .calc input{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:.45rem .6rem;font:.85rem var(--mono)}
+  .result{margin-top:.8rem;padding:.8rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  .result .big{font:800 1.6rem var(--mono);font-variant-numeric:tabular-nums}
+  .result .own{color:var(--good)} .result .rent{color:var(--bad)} .result .same{color:var(--warn)}
+  ul.plain{margin:.3rem 0 0 1.1rem}
+  ul.plain li{margin:.35rem 0;color:var(--dim)}
+  ul.plain li b{color:var(--ink)}
+  footer{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem}
+  footer a{color:var(--accent)}
+  code{font:.85em var(--mono);background:var(--panel);padding:.06em .3em;border-radius:4px}
+  .cathash{font:.7rem var(--mono);color:var(--dim);word-break:break-all;margin-top:.4rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>FallForge <span class="g">Catalogue</span> — the shelf of sovereign nodes</h1>
+  <p class="sub">Layer 4 of the sovereign-node factory. Pre-minted, <b>owned</b> SLM nodes, one per use-case — each carrying a tamper-evident <a href="https://sjgant80-hub.github.io/fallforge-gate/" style="color:var(--accent)">proof-of-play receipt</a> and a signed <a href="https://sjgant80-hub.github.io/fallforge-mint/" style="color:var(--accent)">mint manifest</a>. Buy the node, own it, <a href="https://sjgant80-hub.github.io/fallnode/" style="color:var(--accent)">run it private</a>. The savings math below runs on <b>your</b> rates — and will tell you honestly when renting is cheaper.</p>
+</header>
+
+<h2>On the shelf <span class="dim" style="font-size:.8rem">— each node verified in your browser</span></h2>
+<div id="cards"><div class="panel dim">loading catalogue…</div></div>
+<div class="cathash" id="cathash"></div>
+
+<h2>Own vs rent — your numbers</h2>
+<div class="panel">
+  <div class="calc">
+    <div><label>asks / month</label><input id="r-asks" type="number" value="100000" min="1"></div>
+    <div><label>tokens / ask</label><input id="r-tok" type="number" value="500" min="1"></div>
+    <div><label>cloud $ / million tok</label><input id="r-cloud" type="number" value="0.50" step="0.01" min="0"></div>
+    <div><label>local kWh / million tok</label><input id="r-kwh" type="number" value="3" step="0.1" min="0"></div>
+    <div><label>electric $ / kWh</label><input id="r-elec" type="number" value="0.10" step="0.01" min="0"></div>
+  </div>
+  <div class="result" id="calc-result"></div>
+  <p class="dim" style="font-size:.8rem;margin-top:.5rem">Defaults are placeholders, not quotes — put in your own cloud price and electricity rate. The kernel computes in integer cents and can return <b>CHEAPER-TO-RENT</b>; nothing here bills anyone.</p>
+</div>
+
+<h2>The estate as use-cases <span class="dim" style="font-size:.8rem">— what's mintable next</span></h2>
+<p class="dim" style="font-size:.88rem">A deterministic crawl of the estate's active repos, bucketed into node use-cases. The two on the shelf are minted; the rest are the roadmap — each a use-case FallForge can mint a node for.</p>
+<div class="usecases" id="usecases"><div class="panel dim">loading use-case map…</div></div>
+
+<h2>How the shelf stays honest</h2>
+<div class="panel">
+  <ul class="plain">
+    <li><b>A node cannot be shelved unless it certifiably beats its base.</b> The kernel refuses a listing whose base receipt isn't a certified BEATS — the shelf sells proof, not hope.</li>
+    <li><b>Every listing and the whole index are content-addressed.</b> Tamper with a summary, a receipt hash, or the node list and the hash breaks — this page recomputes it live.</li>
+    <li><b>Savings run on your rates, in integer cents, and can say rent.</b> No fabricated vendor prices; a calculator that can only ever say "buy" is a brochure, not a tool.</li>
+    <li><b>No money moves here.</b> This is a shelf, not a till — the payment rail is a separate, gated decision behind legal counsel.</li>
+  </ul>
+</div>
+
+<footer>
+  <p>MIT · <a href="https://github.com/sjgant80-hub/fallforge-catalogue">source &amp; mutation gate</a> — the listing, savings and catalogue code on this page is the gated <code>kernel.mjs</code> verbatim (injected, CI-diffed). The factory: <a href="https://sjgant80-hub.github.io/fallforge-gate/">gate</a> proves → <a href="https://sjgant80-hub.github.io/fallforge-mint/">mint</a> forges → <a href="https://sjgant80-hub.github.io/fallnode/">node</a> serves → <b>catalogue</b> shelves.</p>
+</footer>
+</div>
+
+<script type="module">
+// ⟦KERNEL-BEGIN⟧ generated from kernel.mjs by make-page.mjs — do not edit here
+// FallForge Catalogue — the marketplace kernel. Layer 4 of the sovereign-node factory: a
+// listing binds a MINTED node (its signed manifest + gate receipts) to a use-case and an
+// own-vs-rent savings calculator whose numbers come from the buyer's OWN rates — never a
+// fabricated price. Savings can be negative, and the kernel says so (cheaper-to-rent is a
+// first-class verdict, like the gate's LOSES). The catalogue is a content-addressed, tamper-
+// evident index over verified listings. No money moves here — this is a shelf, not a till.
+// No I/O. Pure and total: garbage in → { ok:false, why }, never a throw.
+
+const USE_CASES = Object.freeze([
+  'support-triage', 'code-review', 'legal-review', 'finance-extract', 'doc-classify',
+  'health-triage', 'sales-crm', 'education', 'security-scan', 'content-draft', 'data-extract',
+]);
+
+const isStr = (v) => typeof v === 'string';
+const isNum = (v) => typeof v === 'number' && Number.isFinite(v);
+const isInt = (v) => Number.isInteger(v);
+const isObj = (v) => typeof v === 'object' && v !== null && !Array.isArray(v);
+const HEX = /^[0-9a-f]+$/;
+
+// ── SHA-256 + canonical JSON (the estate's proven pair) ─────────────────────────────────────────
+const K256 = new Uint32Array([
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+]);
+
+function sha256(text) {
+  if (!isStr(text)) return { ok: false, why: 'sha256 takes a string' };
+  const data = new TextEncoder().encode(text);
+  const len = data.length;
+  const padded = new Uint8Array((((len + 8) >> 6) << 6) + 64);
+  padded.set(data);
+  padded[len] = 0x80;
+  const dv = new DataView(padded.buffer);
+  const bitLen = len * 8;
+  dv.setUint32(padded.length - 8, Math.floor(bitLen / 4294967296));
+  dv.setUint32(padded.length - 4, bitLen >>> 0);
+  let h0 = 0x6a09e667, h1 = 0xbb67ae85, h2 = 0x3c6ef372, h3 = 0xa54ff53a;
+  let h4 = 0x510e527f, h5 = 0x9b05688c, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
+  const w = new Uint32Array(64);
+  for (let i = 0; i < padded.length; i += 64) {
+    for (let t = 0; t < 16; t++) w[t] = dv.getUint32(i + t * 4);
+    for (let t = 16; t < 64; t++) {
+      const x = w[t - 15], y = w[t - 2];
+      const s0 = (((x >>> 7) | (x << 25)) ^ ((x >>> 18) | (x << 14)) ^ (x >>> 3)) >>> 0;
+      const s1 = (((y >>> 17) | (y << 15)) ^ ((y >>> 19) | (y << 13)) ^ (y >>> 10)) >>> 0;
+      w[t] = (w[t - 16] + s0 + w[t - 7] + s1) >>> 0;
+    }
+    let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, hh = h7;
+    for (let t = 0; t < 64; t++) {
+      const S1 = (((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7))) >>> 0;
+      const ch = ((e & f) ^ (~e & g)) >>> 0;
+      const t1 = (hh + S1 + ch + K256[t] + w[t]) >>> 0;
+      const S0 = (((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10))) >>> 0;
+      const maj = ((a & b) ^ (a & c) ^ (b & c)) >>> 0;
+      const t2 = (S0 + maj) >>> 0;
+      hh = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    h0 = (h0 + a) >>> 0; h1 = (h1 + b) >>> 0; h2 = (h2 + c) >>> 0; h3 = (h3 + d) >>> 0;
+    h4 = (h4 + e) >>> 0; h5 = (h5 + f) >>> 0; h6 = (h6 + g) >>> 0; h7 = (h7 + hh) >>> 0;
+  }
+  const hex = (n) => n.toString(16).padStart(8, '0');
+  return { ok: true, hash: hex(h0) + hex(h1) + hex(h2) + hex(h3) + hex(h4) + hex(h5) + hex(h6) + hex(h7) };
+}
+
+function canon(v) {
+  if (v === null || typeof v === 'number' || typeof v === 'boolean') return JSON.stringify(v);
+  if (typeof v === 'string') return JSON.stringify(v);
+  if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
+  if (typeof v === 'object') return '{' + Object.keys(v).sort().map((k) => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
+  return '"?"';
+}
+
+// ── own-vs-rent savings: the buyer's OWN rates, integer cents, drift-free, can go negative ──────
+function validRates(r) {
+  if (!isObj(r)) return 'rates is an object';
+  if (!isInt(r.asksPerMonth) || r.asksPerMonth <= 0) return 'asksPerMonth must be a positive integer';
+  if (!isInt(r.tokensPerAsk) || r.tokensPerAsk <= 0) return 'tokensPerAsk must be a positive integer';
+  if (!isNum(r.cloudUsdPerMtok) || r.cloudUsdPerMtok < 0) return 'cloudUsdPerMtok must be a non-negative number';
+  if (!isNum(r.localKwhPerMtok) || r.localKwhPerMtok < 0) return 'localKwhPerMtok must be a non-negative number';
+  if (!isNum(r.electricUsdPerKwh) || r.electricUsdPerKwh < 0) return 'electricUsdPerKwh must be a non-negative number';
+  return null;
+}
+
+/** savings(rates) — deterministic own-vs-rent, in integer cents. Never invents a price; the
+ *  caller supplies every rate. verdict CHEAPER-TO-OWN / SAME / CHEAPER-TO-RENT is honest. */
+function savings(rates) {
+  const bad = validRates(rates);
+  if (bad) return { ok: false, why: bad };
+  const monthlyTokens = rates.asksPerMonth * rates.tokensPerAsk;              // integer
+  const mtok = monthlyTokens / 1000000;
+  const cloudCents = Math.round(mtok * rates.cloudUsdPerMtok * 100);
+  const localCents = Math.round(mtok * rates.localKwhPerMtok * rates.electricUsdPerKwh * 100);
+  const savedCents = cloudCents - localCents;
+  const verdict = savedCents > 0 ? 'CHEAPER-TO-OWN' : savedCents < 0 ? 'CHEAPER-TO-RENT' : 'SAME';
+  return {
+    ok: true, monthlyTokens, cloudCents, localCents, savedCents, verdict,
+    why: verdict === 'CHEAPER-TO-OWN' ? 'owning saves money at these rates'
+      : verdict === 'CHEAPER-TO-RENT' ? 'at these rates renting is cheaper — the honest answer'
+      : 'the two cost the same at these rates',
+  };
+}
+
+// ── a listing: a minted node bound to a use-case, its manifest and receipt hashes, savings ──────
+function validReceiptRef(r) {
+  if (!isObj(r)) return 'a receipt reference is an object';
+  if (!isStr(r.vs) || r.vs.length === 0) return 'receipt ref needs a vs model name';
+  if (!isStr(r.hash) || r.hash.length !== 64 || !HEX.test(r.hash)) return 'receipt ref needs a 64-hex hash';
+  if (!isStr(r.verdict) || r.verdict.length === 0) return 'receipt ref needs a verdict';
+  if (typeof r.certified !== 'boolean') return 'receipt ref needs a boolean certified flag';
+  return null;
+}
+
+function validListing(l) {
+  if (!isObj(l)) return { ok: false, why: 'a listing is an object' };
+  if (!isStr(l.node) || l.node.length === 0) return { ok: false, why: 'a listing needs a node name' };
+  if (!isStr(l.useCase) || !USE_CASES.includes(l.useCase)) return { ok: false, why: 'useCase must be one of the known kinds' };
+  if (!isStr(l.base) || l.base.length === 0) return { ok: false, why: 'a listing needs a base model' };
+  if (!isStr(l.summary) || l.summary.trim().length === 0) return { ok: false, why: 'a listing needs a summary' };
+  if (!isStr(l.manifestHash) || l.manifestHash.length !== 64 || !HEX.test(l.manifestHash)) return { ok: false, why: 'a listing needs a 64-hex manifest hash' };
+  if (!Array.isArray(l.receipts) || l.receipts.length === 0) return { ok: false, why: 'a listing carries at least one receipt reference' };
+  for (const [i, r] of l.receipts.entries()) { const bad = validReceiptRef(r); if (bad) return { ok: false, why: 'receipt ' + i + ': ' + bad }; }
+  // a listing may only be shelved if it BEATS its base, certified — the shelf sells proof, not hope
+  const base = l.receipts.find((r) => r.vs === l.base);
+  if (!base) return { ok: false, why: 'a listing must carry the receipt against its own base model' };
+  if (base.verdict !== 'BEATS' || base.certified !== true) return { ok: false, why: 'a node that does not certifiably beat its base cannot be shelved' };
+  return { ok: true };
+}
+
+function makeListing(l) {
+  const v = validListing(l);
+  if (!v.ok) return v;
+  const body = {
+    v: 1, kind: 'fallforge-listing',
+    node: l.node, useCase: l.useCase, base: l.base, summary: l.summary,
+    manifestHash: l.manifestHash,
+    receipts: l.receipts.map((r) => ({ vs: r.vs, hash: r.hash, verdict: r.verdict, certified: r.certified })),
+    scope: 'proof is scoped to each receipt’s probe set; savings use the buyer’s own rates',
+  };
+  const h = sha256(canon(body));
+  if (!h.ok) return { ok: false, why: h.why };
+  return { ok: true, listing: { ...body, hash: h.hash } };
+}
+
+function verifyListing(l) {
+  if (!isObj(l) || l.kind !== 'fallforge-listing' || !isStr(l.hash)) return { ok: false, why: 'not a fallforge listing' };
+  const body = { ...l };
+  delete body.hash;
+  const h = sha256(canon(body));
+  if (!h.ok) return { ok: false, why: h.why };
+  if (h.hash !== l.hash) return { ok: true, valid: false, why: 'hash mismatch — the listing does not match its own facts' };
+  return { ok: true, valid: true, why: 'listing intact' };
+}
+
+// ── the catalogue: a content-addressed index over verified listings ─────────────────────────────
+function buildCatalogue(listings) {
+  if (!Array.isArray(listings)) return { ok: false, why: 'the catalogue takes an array of listings' };
+  const seen = new Set();
+  const entries = [];
+  for (const [i, l] of listings.entries()) {
+    const v = verifyListing(l);
+    if (!v.ok) return { ok: false, why: 'listing ' + i + ': ' + v.why };
+    if (v.valid !== true) return { ok: false, why: 'listing ' + i + ' (' + l.node + '): ' + v.why };
+    if (seen.has(l.node)) return { ok: false, why: 'duplicate node in the catalogue: ' + l.node };
+    seen.add(l.node);
+    entries.push({ node: l.node, useCase: l.useCase, base: l.base, summary: l.summary, hash: l.hash });
+  }
+  entries.sort((a, b) => a.node.localeCompare(b.node));   // no comparison operators to mutate; nodes are unique (deduped above)
+  const index = { v: 1, kind: 'fallforge-catalogue', count: entries.length, nodes: entries };
+  const h = sha256(canon(index));
+  if (!h.ok) return { ok: false, why: h.why };
+  return { ok: true, catalogue: { ...index, hash: h.hash } };
+}
+
+function verifyCatalogue(cat) {
+  if (!isObj(cat) || cat.kind !== 'fallforge-catalogue' || !isStr(cat.hash)) return { ok: false, why: 'not a fallforge catalogue' };
+  const body = { ...cat };
+  delete body.hash;
+  const h = sha256(canon(body));
+  if (!h.ok) return { ok: false, why: h.why };
+  if (h.hash !== cat.hash) return { ok: true, valid: false, why: 'hash mismatch — the catalogue does not match its own entries' };
+  if (!Array.isArray(cat.nodes) || cat.nodes.length !== cat.count) return { ok: true, valid: false, why: 'count does not match the entries' };
+  return { ok: true, valid: true, why: 'catalogue intact' };
+}
+
+/** filterByUseCase(catalogue, useCase) — a pure view; the index is never mutated. */
+function filterByUseCase(cat, useCase) {
+  const v = verifyCatalogue(cat);
+  if (!v.ok) return v;
+  if (v.valid !== true) return { ok: false, why: v.why };
+  if (!isStr(useCase) || !USE_CASES.includes(useCase)) return { ok: false, why: 'unknown use-case' };
+  return { ok: true, nodes: cat.nodes.filter((n) => n.useCase === useCase) };
+}
+// ⟦KERNEL-END⟧
+
+(function () {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const usd = (cents) => '$' + (cents / 100).toFixed(2);
+
+  async function loadCatalogue() {
+    try {
+      const listings = JSON.parse(await (await fetch('catalogue/listings.json', { cache: 'no-store' })).text());
+      const cat = JSON.parse(await (await fetch('catalogue/catalogue.json', { cache: 'no-store' })).text());
+      const cv = verifyCatalogue(cat);
+      $('cards').innerHTML = listings.map((l) => {
+        const lv = verifyListing(l);
+        const recs = l.receipts.map((r) => {
+          const cls = r.verdict === 'BEATS' ? 'beats' : r.verdict === 'LOSES' ? 'loses' : '';
+          return '<div class="rec"><span>vs ' + esc(r.vs) + '</span><span class="' + cls + '">' + esc(r.verdict) + (r.certified ? ' ✓' : '') + '</span></div>';
+        }).join('');
+        return '<div class="node"><div class="top"><div class="name">' + esc(l.node) + '</div><div class="uc">' + esc(l.useCase) + ' · base ' + esc(l.base) + '</div></div>' +
+          '<div class="sum">' + esc(l.summary) + '</div>' + recs +
+          '<div class="foot">' + (lv.valid ? '<span class="badge ok">LISTING VERIFIED</span>' : '<span class="badge bad">TAMPERED</span>') +
+          ' manifest ' + esc(l.manifestHash.slice(0, 12)) + '…</div></div>';
+      }).join('') || '<div class="panel dim">the shelf is empty right now — nodes are minted, then listed.</div>';
+      $('cathash').innerHTML = cv.ok && cv.valid === true
+        ? '<span class="badge ok">CATALOGUE INDEX VERIFIED</span> ' + cat.count + ' nodes · sha256 ' + esc(cat.hash)
+        : '<span class="badge bad">CATALOGUE INDEX BROKEN</span>';
+    } catch (e) {
+      $('cards').innerHTML = '<div class="panel dim">could not load the catalogue (' + esc(e.message) + ')</div>';
+    }
+  }
+
+  async function loadUseCases() {
+    try {
+      const map = JSON.parse(await (await fetch('catalogue/estate-usecases.json', { cache: 'no-store' })).text());
+      const shelved = new Set(['support-triage', 'code-review']);
+      $('usecases').innerHTML = map.usecases.map((u) =>
+        '<div class="uc-row' + (shelved.has(u.key) ? ' has' : '') + '"><span><span class="n">' + esc(u.label) + '</span>' +
+        (shelved.has(u.key) ? ' <span class="badge ok" style="font-size:.6rem">MINTED</span>' : '') +
+        '<br><span class="dim" style="font-size:.72rem">e.g. ' + esc((u.examples || []).slice(0, 3).join(', ')) + '</span></span>' +
+        '<span class="mono dim">' + u.count + ' repos<br>' + u.live + ' live</span></div>').join('');
+    } catch (e) { $('usecases').innerHTML = '<div class="panel dim">use-case map unavailable</div>'; }
+  }
+
+  function recalc() {
+    const rates = {
+      asksPerMonth: parseInt($('r-asks').value, 10),
+      tokensPerAsk: parseInt($('r-tok').value, 10),
+      cloudUsdPerMtok: parseFloat($('r-cloud').value),
+      localKwhPerMtok: parseFloat($('r-kwh').value),
+      electricUsdPerKwh: parseFloat($('r-elec').value),
+    };
+    const s = savings(rates);
+    if (!s.ok) { $('calc-result').innerHTML = '<span class="dim">' + esc(s.why) + '</span>'; return; }
+    const cls = s.verdict === 'CHEAPER-TO-OWN' ? 'own' : s.verdict === 'CHEAPER-TO-RENT' ? 'rent' : 'same';
+    const headline = s.verdict === 'CHEAPER-TO-OWN' ? 'You save ' + usd(s.savedCents) + ' / month by owning'
+      : s.verdict === 'CHEAPER-TO-RENT' ? 'Renting is cheaper by ' + usd(-s.savedCents) + ' / month'
+      : 'Owning and renting cost the same';
+    $('calc-result').innerHTML = '<div class="big ' + cls + '">' + esc(headline) + '</div>' +
+      '<div class="mono dim" style="margin-top:.3rem">' + (s.monthlyTokens.toLocaleString()) + ' tok/mo · rent ' + usd(s.cloudCents) + ' vs own ' + usd(s.localCents) + ' · verdict <b style="color:var(--ink)">' + esc(s.verdict) + '</b></div>';
+  }
+
+  ['r-asks', 'r-tok', 'r-cloud', 'r-kwh', 'r-elec'].forEach((id) => $(id).addEventListener('input', recalc));
+  loadCatalogue(); loadUseCases(); recalc();
+})();
+</script>
+</body>
+</html>
