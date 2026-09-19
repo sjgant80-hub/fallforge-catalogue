@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 // build-catalogue.mjs — assemble the shipped catalogue from real minted manifests. Each node's
-// signed manifest (from fallforge-mint) and its gate receipts become a verified listing; the
-// listings are sealed into a content-addressed catalogue. No network, no LLM — pure assembly
-// over artifacts that were already gated and signed.
+// signed manifest and its gate receipts become a verified listing; the listings are sealed into a
+// content-addressed catalogue. No network, no LLM — pure assembly over artifacts that were
+// already gated and signed. The two SOURCES below are the real, historical local paths the shipped
+// triage-1b/review-1b listings were actually built from (the old fallforge-mint CLI's output) — left
+// as-is, since rewriting them would misrepresent where the shipped listings came from. Going
+// forward, a manifest is downloaded from fallforgemint (browser tool, no CLI output folder) and its
+// path here is whatever the seeder saves it to; the kind/hash shape this script checks against
+// (via vendor/mint-kernel.mjs, proven byte-identical to fallforgemint's current kernel) is unchanged.
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { makeListing, buildCatalogue, verifyCatalogue } from './kernel.mjs';
 import { verifyManifest } from './vendor/mint-kernel.mjs';
